@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["DelambreRomme","DelambreRommeMinus1","GregorianLike"],"trait":["LeapSystem"]};

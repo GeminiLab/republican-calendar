@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["DayOfYear","Month"],"mod":["consts","leap"],"struct":["DateWithLeap"],"type":["Date","Day","Year"]};
