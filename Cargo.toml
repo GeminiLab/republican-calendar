@@ -2,7 +2,7 @@
 name = "republican-calendar"
 description = "A Rust library for the French Republican Calendar"
 categories = ["date-and-time"]
-keywords = ["calendar", "date", "french-republican-calendar"]
+keywords = ["calendar", "date", "republican-calendar"]
 version = "0.1.0"
 edition = "2024"
 authors = [ "aarkegz <aarkegz@gmail.com>" ]
