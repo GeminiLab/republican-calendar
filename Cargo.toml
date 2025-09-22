@@ -1,0 +1,29 @@
+[package]
+name = "republican-calendar"
+description = "A Rust library for the French Republican Calendar"
+categories = ["date-and-time"]
+keywords = ["calendar", "date", "french-republican-calendar"]
+version = "0.1.0"
+edition = "2024"
+authors = [ "aarkegz <aarkegz@gmail.com>" ]
+license = "MIT"
+include = [
+    "README.md",
+    "LICENSE",
+    "Cargo.toml",
+    "src/**/*",
+    "examples/**/*",
+]
+
+[features]
+default = ["now"]
+now = ["chrono/clock"]
+
+[dependencies]
+enumerable = "1.2"
+chrono = { version = "0.4", default-features = false }
+
+[[example]]
+name = "today"
+path = "examples/today.rs"
+required-features = ["now"]

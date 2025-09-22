@@ -1,0 +1,55 @@
+name: Build, Test, and Doc
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    name: Check, Lint and Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
+      - name: Run tests
+        run: cargo test --all-features
+      - name: Run clippy
+        run: cargo clippy -- -D warnings
+      - name: Check formatting
+        run: cargo fmt --check
+
+  doc:
+    name: Build and Deploy Docs
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    permissions:
+      contents: write
+    env:
+      default-branch: ${{ format('refs/heads/{0}', github.event.repository.default_branch) }}
+      RUSTDOCFLAGS: -D rustdoc::broken_intra_doc_links -D missing-docs
+    steps:
+    - uses: actions/checkout@v4
+    - uses: dtolnay/rust-toolchain@stable
+    - name: Build docs
+      continue-on-error: ${{ github.ref != env.default-branch && github.event_name != 'pull_request' }}
+      run: |
+        cargo doc --no-deps --all-features
+        printf '<meta http-equiv="refresh" content="0;url=%s/index.html">' $(cargo tree | head -1 | cut -d' ' -f1) > target/doc/index.html
+    - name: Deploy to Github Pages
+      if: ${{ github.ref == env.default-branch }}
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        single-commit: true
+        branch: gh-pages
+        folder: target/doc
